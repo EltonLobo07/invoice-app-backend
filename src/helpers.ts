@@ -59,11 +59,27 @@ async function useTransaction<TAsyncTaskResult>(
     }
 }
 
+function makeShallowObjWithKeysRemoved<
+    TObj extends object, 
+    TKey extends keyof TObj & string
+>(obj: TObj, keys: Array<TKey>) {
+    const keySet = new Set<string>(keys);
+    const resObj: Record<string, unknown> = {};
+    for (const key of Object.keys(obj)) {
+        const curKey = key as keyof TObj;
+        if (!keySet.has(key)) {
+            resObj[key] = obj[curKey];
+        }
+    }
+    return resObj as Required<Omit<TObj, TKey>>;
+}
+
 export const helpers = {
     validateAndGetInvoiceData,
     buildInvoiceParams,
     convertDateToCustomStr,
     getDateCloneWithNumDays,
     roundNumToTwoDigitsAfterPoint,
-    useTransaction
+    useTransaction,
+    makeShallowObjWithKeysRemoved
 };

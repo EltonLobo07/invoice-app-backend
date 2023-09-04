@@ -28,16 +28,16 @@ content-type: application/json
     "clientEmail": "elton.lobo@gmail.com",
     "description": "some description",
     "clientAddress": {
-        "street": "some street",
-        "city": "some city",
-        "country": "some country",
-        "postCode": "some postCode"
+        "street": "some client street",
+        "city": "some client city",
+        "country": "some client country",
+        "postCode": "some client postCode"
     },
     "senderAddress": {
-        "street": "some street",
-        "city": "some city",
-        "country": "some country",
-        "postCode": "some postCode"
+        "street": "some sender street",
+        "city": "some sender city",
+        "country": "some sender country",
+        "postCode": "some sender postCode"
     },
     "items": [
         {
@@ -47,3 +47,7 @@ content-type: application/json
         }
     ]
 }
+
+###
+
+GET {{baseurl}} HTTP/1.1

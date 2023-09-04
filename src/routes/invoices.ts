@@ -94,12 +94,12 @@ invoicesRouter.post(BASE_URL, (req, res, next) => {
                             paymentTerms: paymentTermEntry.num_days,
                             clientName: addedInvoice.client_name,
                             status: statusEntry.type,
-                            senderAddress: addedAddresses[0],
-                            clientAddress: addedAddresses[1],
+                            senderAddress: helpers.makeShallowObjWithKeysRemoved(addedAddresses[0], ["invoice_id", "type"]),
+                            clientAddress: helpers.makeShallowObjWithKeysRemoved(addedAddresses[1], ["invoice_id", "type"]),
                             items: addedItems.map(item => {
                                 const roundedPrice = helpers.roundNumToTwoDigitsAfterPoint(Number(item.price)); 
                                 return {
-                                    ...item, 
+                                    ...(helpers.makeShallowObjWithKeysRemoved(item, ["invoice_id"])),
                                     price: roundedPrice,
                                     total: helpers.roundNumToTwoDigitsAfterPoint(
                                         roundedPrice * Number(item.quantity)
