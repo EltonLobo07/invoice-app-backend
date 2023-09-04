@@ -14,7 +14,7 @@ export function up(pgm: MigrationBuilder) {
             important parts of the application quickly
         */
         CREATE TABLE ${ITEMS} (
-            invoice_id VARCHAR(6) NOT NULL REFERENCES invoices(id) ON DELETE CASCADE,
+            invoice_id INT NOT NULL REFERENCES invoices(id) ON DELETE CASCADE,
             name VARCHAR(320),
             price NUMERIC,
             quantity INT CHECK (quantity > 0)

@@ -14,13 +14,12 @@ export function up(pgm: MigrationBuilder) {
             important parts of the application quickly
         */
         CREATE TABLE ${ADDRESSES} (
-            invoice_id VARCHAR(6) NOT NULL REFERENCES invoices(id) ON DELETE CASCADE, 
+            invoice_id INT NOT NULL REFERENCES invoices(id) ON DELETE CASCADE, 
             type address_type NOT NULL,
             street VARCHAR(512),
             city VARCHAR(320),
-            state VARCHAR(320),
             country VARCHAR(320),
-            zip_code VARCHAR(128)
+            post_code VARCHAR(128)
         );
     `);
 }
