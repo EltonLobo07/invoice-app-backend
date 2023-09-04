@@ -1,0 +1,49 @@
+@hostname = localhost
+@port = 3000
+@baseurl = http://{{hostname}}:{{port}}/invoices
+
+###
+
+POST {{baseurl}}  HTTP/1.1
+content-type: application/json
+
+{
+    "status": "draft",
+    "id": "AB3456",
+    "createdAt": "2023-09-04",
+    "paymentTerms": 1
+}
+
+###
+
+POST {{baseurl}} HTTP/1.1
+content-type: application/json
+
+{
+    "status": "pending",
+    "id": "AB3456",
+    "createdAt": "2023-09-04",
+    "paymentTerms": 1,
+    "clientName": "Elton Lobo",
+    "clientEmail": "elton.lobo@gmail.com",
+    "description": "some description",
+    "clientAddress": {
+        "street": "some street",
+        "city": "some city",
+        "country": "some country",
+        "postCode": "some postCode"
+    },
+    "senderAddress": {
+        "street": "some street",
+        "city": "some city",
+        "country": "some country",
+        "postCode": "some postCode"
+    },
+    "items": [
+        {
+            "name": "some name",
+            "price": 12.34,
+            "quantity": 12
+        }
+    ]
+}
