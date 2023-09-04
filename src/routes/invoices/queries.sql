@@ -19,3 +19,9 @@ JOIN
     statuses ON statuses.id = invoices.status_id
 LEFT JOIN
     items ON items.invoice_id = invoices.id;
+
+/* @name addInvoice */
+INSERT INTO
+    invoices 
+VALUES 
+    (:id, :createdAt, :description, :paymentTermId, :clientName, :clientEmail, :statusId);

@@ -8,7 +8,8 @@
     "dev": "ts-node-dev ./src/index.ts",
     "lint": "eslint --ext .ts .",
     "start": "node build/index.js",
-    "migrate": "ts-node node_modules/node-pg-migrate/bin/node-pg-migrate -j ts"
+    "migrate": "ts-node node_modules/node-pg-migrate/bin/node-pg-migrate -j ts",
+    "1-data-migration": "ts-node ./migrations/data/1_populate-payment-terms-and-statuses.ts"
   },
   "keywords": [],
   "author": "Elton Lobo",
