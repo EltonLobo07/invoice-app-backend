@@ -1,3 +1,4 @@
+import * as pg from "pg";
 import { draftStatusInvoiceSchema, exceptDraftStatusInvoiceSchema, statusSchema } from "./validation-schemas";
 
 function validateAndGetInvoiceData(content: unknown) {
@@ -38,10 +39,31 @@ function roundNumToTwoDigitsAfterPoint(num: number) {
     return Number(num.toFixed(2));
 }
 
+async function useTransaction<TAsyncTaskResult>(
+    pool: pg.Pool, 
+    asyncTask: (client: pg.PoolClient) => Promise<TAsyncTaskResult>
+): Promise<TAsyncTaskResult> {
+    const client = await pool.connect();
+    try {
+        await client.query("BEGIN");
+        const result = await asyncTask(client);
+        await client.query("COMMIT");
+        return result;
+    }
+    catch(error) {
+        await client.query("ROLLBACK");
+        throw error;
+    }
+    finally {
+        client.release();
+    }
+}
+
 export const helpers = {
     validateAndGetInvoiceData,
     buildInvoiceParams,
     convertDateToCustomStr,
     getDateCloneWithNumDays,
-    roundNumToTwoDigitsAfterPoint
+    roundNumToTwoDigitsAfterPoint,
+    useTransaction
 };
