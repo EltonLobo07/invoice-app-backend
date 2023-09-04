@@ -99,3 +99,41 @@ const addInvoiceIR: any = {"usedParamSet":{"frontendId":true,"createdAt":true,"d
 export const addInvoice = new PreparedQuery<IAddInvoiceParams,IAddInvoiceResult>(addInvoiceIR);
 
 
+/** 'DeleteInvoiceByFrontendId' parameters type */
+export interface IDeleteInvoiceByFrontendIdParams {
+  frontendId?: string | null | void;
+}
+
+/** 'DeleteInvoiceByFrontendId' return type */
+export interface IDeleteInvoiceByFrontendIdResult {
+  client_email: string | null;
+  client_name: string | null;
+  created_at: Date;
+  description: string | null;
+  frontend_id: string;
+  id: number;
+  payment_term_id: number;
+  status_id: number;
+}
+
+/** 'DeleteInvoiceByFrontendId' query type */
+export interface IDeleteInvoiceByFrontendIdQuery {
+  params: IDeleteInvoiceByFrontendIdParams;
+  result: IDeleteInvoiceByFrontendIdResult;
+}
+
+const deleteInvoiceByFrontendIdIR: any = {"usedParamSet":{"frontendId":true},"params":[{"name":"frontendId","required":false,"transform":{"type":"scalar"},"locs":[{"a":50,"b":60}]}],"statement":"DELETE FROM\n    invoices\nWHERE \n    frontend_id = :frontendId\nRETURNING *"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * DELETE FROM
+ *     invoices
+ * WHERE 
+ *     frontend_id = :frontendId
+ * RETURNING *
+ * ```
+ */
+export const deleteInvoiceByFrontendId = new PreparedQuery<IDeleteInvoiceByFrontendIdParams,IDeleteInvoiceByFrontendIdResult>(deleteInvoiceByFrontendIdIR);
+
+

@@ -26,3 +26,10 @@ INSERT INTO
 VALUES
     (:frontendId, :createdAt, :description, :paymentTermId, :clientName, :clientEmail, :statusId)
 RETURNING *;
+
+/* @name deleteInvoiceByFrontendId */
+DELETE FROM
+    invoices
+WHERE 
+    frontend_id = :frontendId
+RETURNING *;
