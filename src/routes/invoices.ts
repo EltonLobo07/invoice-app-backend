@@ -46,12 +46,13 @@ invoicesRouter.get(`${BASE_URL}/:frontendId`, (req, res, next) => {
 
 async function invoiceRouterAddInvoice<
     TRes extends Response
->({ client, reqBody, res }: {
+>({ client, reqBody, res, id }: {
     client: pg.PoolClient,
     reqBody: unknown,
-    res: TRes 
+    res: TRes,
+    id?: string 
 }) {
-    const invoiceData = helpers.validateAndGetInvoiceData(reqBody);
+    const invoiceData = helpers.validateAndGetInvoiceData(reqBody, id);
     const statusEntry = (await findStatusByType.run({
         type: invoiceData.status
     }, client))[0];
@@ -79,7 +80,7 @@ async function invoiceRouterAddInvoice<
     */
     const commonErrMsg = "Couldn't add invoice due to some error at the server";
     const [addedInvoice] = await addInvoice.run(
-        helpers.buildInvoiceParams(invoiceData, statusEntry.id, paymentTermEntry.id), 
+        helpers.buildInvoiceParams(invoiceData, statusEntry.id, paymentTermEntry.id, id), 
         client
     );
     if (!addInvoice) {
@@ -115,13 +116,14 @@ async function invoiceRouterAddInvoice<
         description: addedInvoice.description,
         paymentTerms: paymentTermEntry.num_days,
         clientName: addedInvoice.client_name,
+        clientEmail: addedInvoice.client_email,
         status: statusEntry.type,
         senderAddress: helpers.makeShallowObjWithKeysRemoved(addedAddresses[0], ["invoice_id", "type"]),
         clientAddress: helpers.makeShallowObjWithKeysRemoved(addedAddresses[1], ["invoice_id", "type"]),
         items: addedItems.map(item => {
             const roundedPrice = helpers.roundNumToTwoDigitsAfterPoint(Number(item.price)); 
             return {
-                ...(helpers.makeShallowObjWithKeysRemoved(item, ["invoice_id"])),
+                ...(helpers.makeShallowObjWithKeysRemoved(item, ["invoice_id", "arr_index"])),
                 price: roundedPrice,
                 total: helpers.roundNumToTwoDigitsAfterPoint(
                     roundedPrice * Number(item.quantity)
@@ -169,7 +171,8 @@ invoicesRouter.put(`${BASE_URL}/:invoiceId`, (req, res, next) => {
                     return invoiceRouterAddInvoice({
                         client,
                         reqBody: req.body,
-                        res
+                        res,
+                        id: req.params.invoiceId
                     });
                 }
             );

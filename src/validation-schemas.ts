@@ -17,9 +17,11 @@ const ITEM_PRICE_MIN = 0;
 export const statusSchema = z.object({
     status: z.enum(ALLOWED_STATUS)
 });
+// First two characters should be uppercased English letters and the next four should be digits
+export const idSchema = z.object({
+    id: z.string().length(6).regex(/^[A-Z]{2}[0-9]{4}/)
+});
 const essentialsSchema = z.object({
-    // First two characters should be uppercased English letters and the next four should be digits
-    id: z.string().length(6).regex(/^[A-Z]{2}[0-9]{4}/),
     createdAt: z.string().refine(val => {
         const dateStr = val.toUpperCase().split("T")[0];
         return (

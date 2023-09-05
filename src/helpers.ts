@@ -1,19 +1,21 @@
 import * as pg from "pg";
-import { draftStatusInvoiceSchema, exceptDraftStatusInvoiceSchema, statusSchema } from "./validation-schemas";
+import { draftStatusInvoiceSchema, exceptDraftStatusInvoiceSchema, idSchema, statusSchema } from "./validation-schemas";
 
-function validateAndGetInvoiceData(content: unknown) {
+function validateAndGetInvoiceData(content: unknown, id?: string) {
     const statusObj = statusSchema.parse(content);
+    const idObj = id !== undefined ? {id} : idSchema.parse(content);
     const invoiceSchema = statusObj.status === "draft" ? draftStatusInvoiceSchema : exceptDraftStatusInvoiceSchema;
-    return Object.assign(statusObj, invoiceSchema.parse(content));
+    return Object.assign(idObj, statusObj, invoiceSchema.parse(content));
 }
 
 function buildInvoiceParams(
     data: ReturnType<typeof validateAndGetInvoiceData>,
     statusId: number,
-    paymentTermId: number
+    paymentTermId: number,
+    id?: string
 ) {
     return {
-        frontendId: data.id,
+        frontendId: id ?? data.id,
         createdAt: data.createdAt,
         description: data.description,
         clientName: data.clientName,

@@ -13,6 +13,6 @@ export function up(pgm: MigrationBuilder) {
 
 export function down(pgm: MigrationBuilder) {
     pgm.sql(`
-        DROP TABLE ${ADDRESS_TYPE};
+        DROP TYPE ${ADDRESS_TYPE};
     `);
 }

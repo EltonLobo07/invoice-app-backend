@@ -60,4 +60,70 @@ content-type: application/json
 
 ###
 
+PUT {{baseurl}}/AB3457
+content-type: application/json
+
+{
+    "status": "paid",
+    "createdAt": "2023-09-05",
+    "paymentTerms": 30,
+    "clientName": "Elton Lobo",
+    "clientEmail": "elton.lobo123@gmail.com",
+    "description": "updated description",
+    "clientAddress": {
+        "street": "updated client street",
+        "city": "updated client city",
+        "country": "updated client country",
+        "postCode": "updated client postCode"
+    },
+    "senderAddress": {
+        "street": "updated sender street",
+        "city": "updated sender city",
+        "country": "updated sender country",
+        "postCode": "updated sender postCode"
+    },
+    "items": [
+        {
+            "name": "item 1 name",
+            "price": 16.432,
+            "quantity": 3
+        },
+        {
+            "name": "upadted item 2 name",
+            "price": 140.612,
+            "quantity": 39
+        }
+    ]
+}
+
+###
+
+PUT {{baseurl}}/AB3455  HTTP/1.1
+content-type: application/json
+
+{
+    "status": "draft",
+    "id": "AB3455",
+    "createdAt": "2023-09-04",
+    "paymentTerms": 1
+}
+
+###
+
 GET {{baseurl}} HTTP/1.1
+
+###
+
+GET {{baseurl}}/AB3457 HTTP/1.1
+
+###
+
+GET {{baseurl}}/AB3453 HTTP/1.1
+
+###
+
+DELETE {{baseurl}}/AB3453 HTTP/1.1
+
+###
+
+DELETE {{baseurl}}/AB3457 HTTP/1.1
