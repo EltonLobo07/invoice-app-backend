@@ -2,6 +2,7 @@ import express from "express";
 import { invoicesRouter } from "./routes/invoices";
 import jwt from "jsonwebtoken";
 import { usersRouter } from "./routes/users";
+import morgan from "morgan";
 import { Token, authenticationRouter } from "./routes/authentication";
 
 /*
@@ -22,6 +23,7 @@ declare global {
 export const appBuilder = () => {
     const app = express();
     app.use(express.json());
+    app.use(morgan(":method :url :status :response-time ms"));
     app.use(usersRouter);
     app.use(authenticationRouter);
 
