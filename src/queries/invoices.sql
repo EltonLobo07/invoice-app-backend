@@ -1,19 +1,21 @@
-/* @name getAllInvoices */
-SELECT * FROM result_invoices;
+/* @name getAllInvoicesByUserId */
+SELECT * FROM result_invoices WHERE user_id = :userId;
 
-/* @name getInvoiceByFrontendId */
-SELECT * FROM result_invoices WHERE id = :frontendId;
+/* @name getInvoiceByUserAndFrontendId */
+SELECT * FROM result_invoices WHERE id = :frontendId AND user_id = :userId;
 
 /* @name addInvoice */
 INSERT INTO
-    invoices (frontend_id, created_at, "description", payment_term_id, client_name, client_email, status_id)
+    invoices (frontend_id, created_at, "description", payment_term_id, client_name, client_email, status_id, user_id)
 VALUES
-    (:frontendId, :createdAt, :description, :paymentTermId, :clientName, :clientEmail, :statusId)
+    (:frontendId, :createdAt, :description, :paymentTermId, :clientName, :clientEmail, :statusId, :userId)
 RETURNING *;
 
-/* @name deleteInvoiceByFrontendId */
+/* @name deleteInvoiceByUserAndFrontendId */
 DELETE FROM
     invoices
 WHERE 
     frontend_id = :frontendId
+    AND 
+    user_id = :userId
 RETURNING *;

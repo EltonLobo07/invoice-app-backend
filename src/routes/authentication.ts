@@ -7,6 +7,11 @@ import { pool } from "../pool";
 
 export const authenticationRouter = express.Router();
 
+export type Token = {
+    id: number,
+    email: string
+};
+
 authenticationRouter.post("/login", (req, res, next) => {
     void (async () => {
         try {
@@ -19,13 +24,14 @@ authenticationRouter.post("/login", (req, res, next) => {
                 return;
             }
             if (process.env.JWT_SECRET === undefined) {
-                res.status(500).json({message: "Couldn't authenticate due to some error at the server"});
+                res.status(500).json({message: "Couldn't authenticate due to some errorr"});
                 return;
             }
-            const token = jwt.sign({
+            const token: Token = {
+                id: userInDb.id,
                 email: loginDetails.email
-            }, process.env.JWT_SECRET);
-            res.status(201).json({jsonWebToken: token});
+            };
+            res.status(201).json({jsonWebToken: jwt.sign(token, process.env.JWT_SECRET)});
         }
         catch(error) {
             console.log(error);

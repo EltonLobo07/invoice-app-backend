@@ -14,6 +14,7 @@ export function up(pgm: MigrationBuilder) {
             */
             id SERIAL PRIMARY KEY, 
             frontend_id VARCHAR(6) NOT NULL UNIQUE,
+            user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
             created_at DATE NOT NULL,
             description VARCHAR(512),
             -- The entry looses its value if payment_term_id is not known, its better to delete the entry

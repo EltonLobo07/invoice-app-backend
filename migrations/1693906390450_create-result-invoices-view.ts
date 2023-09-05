@@ -8,7 +8,8 @@ const VIEW_NAME = "result_invoices";
 export function up(pgm: MigrationBuilder) {
     pgm.sql(`
         CREATE VIEW ${VIEW_NAME} AS (
-            SELECT 
+            SELECT
+                users.id AS user_id, 
                 invoices.frontend_id AS id,
                 TO_CHAR(
                     invoices.created_at, 
@@ -75,6 +76,10 @@ export function up(pgm: MigrationBuilder) {
                 GROUP BY 
                     items.invoice_id
             ) AS items ON items.invoice_id = invoices.id
+            JOIN 
+                users
+                ON 
+                    users.id = invoices.user_id
         );
     `);
 }

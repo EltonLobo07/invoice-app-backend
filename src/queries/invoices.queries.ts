@@ -5,11 +5,13 @@ export type Json = null | boolean | number | string | Json[] | { [key: string]: 
 
 export type JsonArray = (Json)[];
 
-/** 'GetAllInvoices' parameters type */
-export type IGetAllInvoicesParams = void;
+/** 'GetAllInvoicesByUserId' parameters type */
+export interface IGetAllInvoicesByUserIdParams {
+  userId?: number | null | void;
+}
 
-/** 'GetAllInvoices' return type */
-export interface IGetAllInvoicesResult {
+/** 'GetAllInvoicesByUserId' return type */
+export interface IGetAllInvoicesByUserIdResult {
   client_address: Json | null;
   client_email: string | null;
   client_name: string | null;
@@ -21,32 +23,34 @@ export interface IGetAllInvoicesResult {
   payment_terms: number | null;
   sender_address: Json | null;
   status: string | null;
+  user_id: number | null;
 }
 
-/** 'GetAllInvoices' query type */
-export interface IGetAllInvoicesQuery {
-  params: IGetAllInvoicesParams;
-  result: IGetAllInvoicesResult;
+/** 'GetAllInvoicesByUserId' query type */
+export interface IGetAllInvoicesByUserIdQuery {
+  params: IGetAllInvoicesByUserIdParams;
+  result: IGetAllInvoicesByUserIdResult;
 }
 
-const getAllInvoicesIR: any = {"usedParamSet":{},"params":[],"statement":"SELECT * FROM result_invoices"};
+const getAllInvoicesByUserIdIR: any = {"usedParamSet":{"userId":true},"params":[{"name":"userId","required":false,"transform":{"type":"scalar"},"locs":[{"a":46,"b":52}]}],"statement":"SELECT * FROM result_invoices WHERE user_id = :userId"};
 
 /**
  * Query generated from SQL:
  * ```
- * SELECT * FROM result_invoices
+ * SELECT * FROM result_invoices WHERE user_id = :userId
  * ```
  */
-export const getAllInvoices = new PreparedQuery<IGetAllInvoicesParams,IGetAllInvoicesResult>(getAllInvoicesIR);
+export const getAllInvoicesByUserId = new PreparedQuery<IGetAllInvoicesByUserIdParams,IGetAllInvoicesByUserIdResult>(getAllInvoicesByUserIdIR);
 
 
-/** 'GetInvoiceByFrontendId' parameters type */
-export interface IGetInvoiceByFrontendIdParams {
+/** 'GetInvoiceByUserAndFrontendId' parameters type */
+export interface IGetInvoiceByUserAndFrontendIdParams {
   frontendId?: string | null | void;
+  userId?: number | null | void;
 }
 
-/** 'GetInvoiceByFrontendId' return type */
-export interface IGetInvoiceByFrontendIdResult {
+/** 'GetInvoiceByUserAndFrontendId' return type */
+export interface IGetInvoiceByUserAndFrontendIdResult {
   client_address: Json | null;
   client_email: string | null;
   client_name: string | null;
@@ -58,23 +62,24 @@ export interface IGetInvoiceByFrontendIdResult {
   payment_terms: number | null;
   sender_address: Json | null;
   status: string | null;
+  user_id: number | null;
 }
 
-/** 'GetInvoiceByFrontendId' query type */
-export interface IGetInvoiceByFrontendIdQuery {
-  params: IGetInvoiceByFrontendIdParams;
-  result: IGetInvoiceByFrontendIdResult;
+/** 'GetInvoiceByUserAndFrontendId' query type */
+export interface IGetInvoiceByUserAndFrontendIdQuery {
+  params: IGetInvoiceByUserAndFrontendIdParams;
+  result: IGetInvoiceByUserAndFrontendIdResult;
 }
 
-const getInvoiceByFrontendIdIR: any = {"usedParamSet":{"frontendId":true},"params":[{"name":"frontendId","required":false,"transform":{"type":"scalar"},"locs":[{"a":41,"b":51}]}],"statement":"SELECT * FROM result_invoices WHERE id = :frontendId"};
+const getInvoiceByUserAndFrontendIdIR: any = {"usedParamSet":{"frontendId":true,"userId":true},"params":[{"name":"frontendId","required":false,"transform":{"type":"scalar"},"locs":[{"a":41,"b":51}]},{"name":"userId","required":false,"transform":{"type":"scalar"},"locs":[{"a":67,"b":73}]}],"statement":"SELECT * FROM result_invoices WHERE id = :frontendId AND user_id = :userId"};
 
 /**
  * Query generated from SQL:
  * ```
- * SELECT * FROM result_invoices WHERE id = :frontendId
+ * SELECT * FROM result_invoices WHERE id = :frontendId AND user_id = :userId
  * ```
  */
-export const getInvoiceByFrontendId = new PreparedQuery<IGetInvoiceByFrontendIdParams,IGetInvoiceByFrontendIdResult>(getInvoiceByFrontendIdIR);
+export const getInvoiceByUserAndFrontendId = new PreparedQuery<IGetInvoiceByUserAndFrontendIdParams,IGetInvoiceByUserAndFrontendIdResult>(getInvoiceByUserAndFrontendIdIR);
 
 
 /** 'AddInvoice' parameters type */
@@ -86,6 +91,7 @@ export interface IAddInvoiceParams {
   frontendId?: string | null | void;
   paymentTermId?: number | null | void;
   statusId?: number | null | void;
+  userId?: number | null | void;
 }
 
 /** 'AddInvoice' return type */
@@ -98,6 +104,7 @@ export interface IAddInvoiceResult {
   id: number;
   payment_term_id: number;
   status_id: number;
+  user_id: number;
 }
 
 /** 'AddInvoice' query type */
@@ -106,28 +113,29 @@ export interface IAddInvoiceQuery {
   result: IAddInvoiceResult;
 }
 
-const addInvoiceIR: any = {"usedParamSet":{"frontendId":true,"createdAt":true,"description":true,"paymentTermId":true,"clientName":true,"clientEmail":true,"statusId":true},"params":[{"name":"frontendId","required":false,"transform":{"type":"scalar"},"locs":[{"a":133,"b":143}]},{"name":"createdAt","required":false,"transform":{"type":"scalar"},"locs":[{"a":146,"b":155}]},{"name":"description","required":false,"transform":{"type":"scalar"},"locs":[{"a":158,"b":169}]},{"name":"paymentTermId","required":false,"transform":{"type":"scalar"},"locs":[{"a":172,"b":185}]},{"name":"clientName","required":false,"transform":{"type":"scalar"},"locs":[{"a":188,"b":198}]},{"name":"clientEmail","required":false,"transform":{"type":"scalar"},"locs":[{"a":201,"b":212}]},{"name":"statusId","required":false,"transform":{"type":"scalar"},"locs":[{"a":215,"b":223}]}],"statement":"INSERT INTO\n    invoices (frontend_id, created_at, \"description\", payment_term_id, client_name, client_email, status_id)\nVALUES\n    (:frontendId, :createdAt, :description, :paymentTermId, :clientName, :clientEmail, :statusId)\nRETURNING *"};
+const addInvoiceIR: any = {"usedParamSet":{"frontendId":true,"createdAt":true,"description":true,"paymentTermId":true,"clientName":true,"clientEmail":true,"statusId":true,"userId":true},"params":[{"name":"frontendId","required":false,"transform":{"type":"scalar"},"locs":[{"a":142,"b":152}]},{"name":"createdAt","required":false,"transform":{"type":"scalar"},"locs":[{"a":155,"b":164}]},{"name":"description","required":false,"transform":{"type":"scalar"},"locs":[{"a":167,"b":178}]},{"name":"paymentTermId","required":false,"transform":{"type":"scalar"},"locs":[{"a":181,"b":194}]},{"name":"clientName","required":false,"transform":{"type":"scalar"},"locs":[{"a":197,"b":207}]},{"name":"clientEmail","required":false,"transform":{"type":"scalar"},"locs":[{"a":210,"b":221}]},{"name":"statusId","required":false,"transform":{"type":"scalar"},"locs":[{"a":224,"b":232}]},{"name":"userId","required":false,"transform":{"type":"scalar"},"locs":[{"a":235,"b":241}]}],"statement":"INSERT INTO\n    invoices (frontend_id, created_at, \"description\", payment_term_id, client_name, client_email, status_id, user_id)\nVALUES\n    (:frontendId, :createdAt, :description, :paymentTermId, :clientName, :clientEmail, :statusId, :userId)\nRETURNING *"};
 
 /**
  * Query generated from SQL:
  * ```
  * INSERT INTO
- *     invoices (frontend_id, created_at, "description", payment_term_id, client_name, client_email, status_id)
+ *     invoices (frontend_id, created_at, "description", payment_term_id, client_name, client_email, status_id, user_id)
  * VALUES
- *     (:frontendId, :createdAt, :description, :paymentTermId, :clientName, :clientEmail, :statusId)
+ *     (:frontendId, :createdAt, :description, :paymentTermId, :clientName, :clientEmail, :statusId, :userId)
  * RETURNING *
  * ```
  */
 export const addInvoice = new PreparedQuery<IAddInvoiceParams,IAddInvoiceResult>(addInvoiceIR);
 
 
-/** 'DeleteInvoiceByFrontendId' parameters type */
-export interface IDeleteInvoiceByFrontendIdParams {
+/** 'DeleteInvoiceByUserAndFrontendId' parameters type */
+export interface IDeleteInvoiceByUserAndFrontendIdParams {
   frontendId?: string | null | void;
+  userId?: number | null | void;
 }
 
-/** 'DeleteInvoiceByFrontendId' return type */
-export interface IDeleteInvoiceByFrontendIdResult {
+/** 'DeleteInvoiceByUserAndFrontendId' return type */
+export interface IDeleteInvoiceByUserAndFrontendIdResult {
   client_email: string | null;
   client_name: string | null;
   created_at: Date;
@@ -136,15 +144,16 @@ export interface IDeleteInvoiceByFrontendIdResult {
   id: number;
   payment_term_id: number;
   status_id: number;
+  user_id: number;
 }
 
-/** 'DeleteInvoiceByFrontendId' query type */
-export interface IDeleteInvoiceByFrontendIdQuery {
-  params: IDeleteInvoiceByFrontendIdParams;
-  result: IDeleteInvoiceByFrontendIdResult;
+/** 'DeleteInvoiceByUserAndFrontendId' query type */
+export interface IDeleteInvoiceByUserAndFrontendIdQuery {
+  params: IDeleteInvoiceByUserAndFrontendIdParams;
+  result: IDeleteInvoiceByUserAndFrontendIdResult;
 }
 
-const deleteInvoiceByFrontendIdIR: any = {"usedParamSet":{"frontendId":true},"params":[{"name":"frontendId","required":false,"transform":{"type":"scalar"},"locs":[{"a":50,"b":60}]}],"statement":"DELETE FROM\n    invoices\nWHERE \n    frontend_id = :frontendId\nRETURNING *"};
+const deleteInvoiceByUserAndFrontendIdIR: any = {"usedParamSet":{"frontendId":true,"userId":true},"params":[{"name":"frontendId","required":false,"transform":{"type":"scalar"},"locs":[{"a":50,"b":60}]},{"name":"userId","required":false,"transform":{"type":"scalar"},"locs":[{"a":85,"b":91}]}],"statement":"DELETE FROM\n    invoices\nWHERE \n    frontend_id = :frontendId\n    AND \n    user_id = :userId\nRETURNING *"};
 
 /**
  * Query generated from SQL:
@@ -153,9 +162,11 @@ const deleteInvoiceByFrontendIdIR: any = {"usedParamSet":{"frontendId":true},"pa
  *     invoices
  * WHERE 
  *     frontend_id = :frontendId
+ *     AND 
+ *     user_id = :userId
  * RETURNING *
  * ```
  */
-export const deleteInvoiceByFrontendId = new PreparedQuery<IDeleteInvoiceByFrontendIdParams,IDeleteInvoiceByFrontendIdResult>(deleteInvoiceByFrontendIdIR);
+export const deleteInvoiceByUserAndFrontendId = new PreparedQuery<IDeleteInvoiceByUserAndFrontendIdParams,IDeleteInvoiceByUserAndFrontendIdResult>(deleteInvoiceByUserAndFrontendIdIR);
 
 

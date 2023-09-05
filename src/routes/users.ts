@@ -25,7 +25,7 @@ usersRouter.post("/users", (req, res, next) => {
                 passwordHash
             }, pool);
             if (!addedUser) {
-                res.status(500).json("Couldn't add user due to some error at the server");
+                res.status(500).json("Couldn't add user due to some error");
                 return;
             }
             res.status(201).json(helpers.recursiveKeyCamelCase(addedUser));

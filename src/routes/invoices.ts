@@ -1,5 +1,10 @@
 import express, { Response } from "express";
-import { addInvoice, deleteInvoiceByFrontendId, getAllInvoices, getInvoiceByFrontendId } from "../queries/invoices.queries";
+import { 
+    addInvoice, 
+    deleteInvoiceByUserAndFrontendId, 
+    getAllInvoicesByUserId, 
+    getInvoiceByUserAndFrontendId 
+} from "../queries/invoices.queries";
 import { pool } from "../pool";
 import { helpers } from "../helpers";
 import { findStatusByType } from "../queries/statuses.queries";
@@ -12,10 +17,12 @@ export const invoicesRouter = express.Router();
 
 const BASE_URL = "/invoices";
 
-invoicesRouter.get(BASE_URL, (_req, res, next) => {
+invoicesRouter.get(BASE_URL, (req, res, next) => {
     void (async () => {
         try {        
-            const invoices = await getAllInvoices.run(undefined, pool);
+            const invoices = await getAllInvoicesByUserId.run({
+                userId: req.decodedToken.id
+            }, pool);
             res.json(helpers.recursiveKeyCamelCase(invoices));
         }
         catch(error) {
@@ -28,7 +35,8 @@ invoicesRouter.get(BASE_URL, (_req, res, next) => {
 invoicesRouter.get(`${BASE_URL}/:frontendId`, (req, res, next) => {
     void (async () => {
         try {
-            const [invoice] = await getInvoiceByFrontendId.run({
+            const [invoice] = await getInvoiceByUserAndFrontendId.run({
+                userId: req.decodedToken.id,
                 frontendId: req.params.frontendId
             }, pool);
             if (!invoice) {
@@ -46,10 +54,11 @@ invoicesRouter.get(`${BASE_URL}/:frontendId`, (req, res, next) => {
 
 async function invoiceRouterAddInvoice<
     TRes extends Response
->({ client, reqBody, res, id }: {
+>({ client, reqBody, res, userId, id }: {
     client: pg.PoolClient,
     reqBody: unknown,
     res: TRes,
+    userId: number,
     id?: string 
 }) {
     const invoiceData = helpers.validateAndGetInvoiceData(reqBody, id);
@@ -78,9 +87,15 @@ async function invoiceRouterAddInvoice<
         "useTransaction" will assume that all of the queries ran successfully and will
         commit the changes
     */
-    const commonErrMsg = "Couldn't add invoice due to some error at the server";
+    const commonErrMsg = "Couldn't add invoice due to some error";
     const [addedInvoice] = await addInvoice.run(
-        helpers.buildInvoiceParams(invoiceData, statusEntry.id, paymentTermEntry.id, id), 
+        helpers.buildInvoiceParams({
+            data: invoiceData,
+            statusId: statusEntry.id, 
+            paymentTermId: paymentTermEntry.id,
+            userId,
+            invoiceId: id
+        }), 
         client
     );
     if (!addInvoice) {
@@ -141,6 +156,7 @@ invoicesRouter.post(BASE_URL, (req, res, next) => {
                     (client) => invoiceRouterAddInvoice({
                         client,
                         reqBody: req.body,
+                        userId: req.decodedToken.id,
                         res
                     }) 
                 );
@@ -161,7 +177,8 @@ invoicesRouter.put(`${BASE_URL}/:invoiceId`, (req, res, next) => {
             const updatedInvoice = await helpers.useTransaction(
                 pool, 
                 async (client) => {
-                    const [deletedInvoice] = await deleteInvoiceByFrontendId.run({
+                    const [deletedInvoice] = await deleteInvoiceByUserAndFrontendId.run({
+                        userId: req.decodedToken.id,
                         frontendId: req.params.invoiceId
                     }, client);
                     if (!deletedInvoice) {
@@ -172,6 +189,7 @@ invoicesRouter.put(`${BASE_URL}/:invoiceId`, (req, res, next) => {
                         client,
                         reqBody: req.body,
                         res,
+                        userId: req.decodedToken.id,
                         id: req.params.invoiceId
                     });
                 }
@@ -190,7 +208,8 @@ invoicesRouter.put(`${BASE_URL}/:invoiceId`, (req, res, next) => {
 invoicesRouter.delete(`${BASE_URL}/:invoiceId`, (req, res, next) => {
     void (async () => {
         try {
-            await deleteInvoiceByFrontendId.run({
+            await deleteInvoiceByUserAndFrontendId.run({
+                userId: req.decodedToken.id,
                 frontendId: req.params.invoiceId
             }, pool);
             res.status(204).end();

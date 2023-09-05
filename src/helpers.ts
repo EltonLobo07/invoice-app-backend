@@ -14,19 +14,29 @@ function validateAndGetInvoiceData(content: unknown, id?: string) {
 }
 
 function buildInvoiceParams(
-    data: ReturnType<typeof validateAndGetInvoiceData>,
-    statusId: number,
-    paymentTermId: number,
-    id?: string
+    {
+        data,
+        statusId,
+        paymentTermId,
+        userId,
+        invoiceId
+    } : {
+        data: ReturnType<typeof validateAndGetInvoiceData>,
+        statusId: number,
+        paymentTermId: number,
+        userId: number,
+        invoiceId?: string
+    }
 ) {
     return {
-        frontendId: id ?? data.id,
+        frontendId: invoiceId ?? data.id,
         createdAt: data.createdAt,
         description: data.description,
         clientName: data.clientName,
         clientEmail: data.clientEmail,
         statusId,
-        paymentTermId
+        paymentTermId,
+        userId
     };
 }
 
