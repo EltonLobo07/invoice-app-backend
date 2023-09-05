@@ -76,6 +76,26 @@ function makeShallowObjWithKeysRemoved<
     return resObj as Required<Omit<TObj, TKey>>;
 }
 
+/*
+    I don't want to spent time writing a custom implementation so I'll copy from stack overflow
+    https://stackoverflow.com/questions/59769649/recursively-convert-an-object-fields-from-snake-case-to-camelcase/75927783#75927783
+*/
+function recursiveKeyCamelCase(item: unknown): unknown {
+    if (Array.isArray(item)) {
+        return item.map((el: unknown) => recursiveKeyCamelCase(el));
+    } else if (typeof item === 'function' || item !== Object(item)) {
+        return item;
+    }
+    return Object.fromEntries(
+        Object.entries(item as Record<string, unknown>).map(
+        ([key, value]: [string, unknown]) => [
+            key.replace(/([-_][a-z])/gi, c => c.toUpperCase().replace(/[-_]/g, '')),
+            recursiveKeyCamelCase(value),
+        ],
+        ),
+    );
+}
+
 export const helpers = {
     validateAndGetInvoiceData,
     buildInvoiceParams,
@@ -83,5 +103,6 @@ export const helpers = {
     getDateCloneWithNumDays,
     roundNumToTwoDigitsAfterPoint,
     useTransaction,
-    makeShallowObjWithKeysRemoved
+    makeShallowObjWithKeysRemoved,
+    recursiveKeyCamelCase
 };

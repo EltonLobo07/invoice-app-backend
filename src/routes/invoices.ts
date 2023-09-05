@@ -16,7 +16,7 @@ invoicesRouter.get(BASE_URL, (_req, res, next) => {
     void (async () => {
         try {        
             const invoices = await getAllInvoices.run(undefined, pool);
-            res.json(invoices);
+            res.json(helpers.recursiveKeyCamelCase(invoices));
         }
         catch(error) {
             console.log(error);
@@ -35,7 +35,7 @@ invoicesRouter.get(`${BASE_URL}/:frontendId`, (req, res, next) => {
                 res.status(404).json({message: "invoice not found"});
                 return;
             }
-            res.json(invoice);
+            res.json(helpers.recursiveKeyCamelCase(invoice));
         }
         catch(error) {
             console.log(error);
@@ -145,7 +145,7 @@ invoicesRouter.post(BASE_URL, (req, res, next) => {
                     }) 
                 );
                 if (addedTransformedInvoice) {
-                    res.status(201).json(addedTransformedInvoice);
+                    res.status(201).json(helpers.recursiveKeyCamelCase(addedTransformedInvoice));
                 }
             }
             catch(error) {
@@ -177,7 +177,7 @@ invoicesRouter.put(`${BASE_URL}/:invoiceId`, (req, res, next) => {
                 }
             );
             if (updatedInvoice) {
-                res.status(200).json(updatedInvoice);
+                res.status(200).json(helpers.recursiveKeyCamelCase(updatedInvoice));
             }            
         }
         catch(error) {
