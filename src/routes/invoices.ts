@@ -1,5 +1,5 @@
 import express, { Response } from "express";
-import { addInvoice, deleteInvoiceByFrontendId, getAllInvoices } from "../queries/invoices.queries";
+import { addInvoice, deleteInvoiceByFrontendId, getAllInvoices, getInvoiceByFrontendId } from "../queries/invoices.queries";
 import { pool } from "../pool";
 import { helpers } from "../helpers";
 import { findStatusByType } from "../queries/statuses.queries";
@@ -12,7 +12,7 @@ export const invoicesRouter = express.Router();
 
 const BASE_URL = "/invoices";
 
-invoicesRouter.get(BASE_URL, (_req, res) => {
+invoicesRouter.get(BASE_URL, (_req, res, next) => {
     void (async () => {
         try {        
             const invoices = await getAllInvoices.run(undefined, pool);
@@ -20,6 +20,26 @@ invoicesRouter.get(BASE_URL, (_req, res) => {
         }
         catch(error) {
             console.log(error);
+            next(error);
+        }
+    })();
+});
+
+invoicesRouter.get(`${BASE_URL}/:frontendId`, (req, res, next) => {
+    void (async () => {
+        try {
+            const [invoice] = await getInvoiceByFrontendId.run({
+                frontendId: req.params.frontendId
+            }, pool);
+            if (!invoice) {
+                res.status(404).json({message: "invoice not found"});
+                return;
+            }
+            res.json(invoice);
+        }
+        catch(error) {
+            console.log(error);
+            next(error);
         }
     })();
 });
@@ -77,7 +97,7 @@ async function invoiceRouterAddInvoice<
     let addedItems: IAddItemsResult[] = [];
     if (invoiceData.items.length > 0) {
         addedItems = await addItems.run({
-            items: invoiceData.items.map(item => ({invoiceId: addedInvoice.id, ...item})) 
+            items: invoiceData.items.map((item, itemIdx) => ({...item, invoiceId: addedInvoice.id, arrIndex: itemIdx, price: helpers.roundNumToTwoDigitsAfterPoint(item.price)})) 
         }, client);
     }
     if (addedItems.length !== invoiceData.items.length) {

@@ -17,7 +17,9 @@ export function up(pgm: MigrationBuilder) {
             invoice_id INT NOT NULL REFERENCES invoices(id) ON DELETE CASCADE,
             name VARCHAR(320),
             price NUMERIC,
-            quantity INT CHECK (quantity > 0)
+            arr_index INT NOT NULL,
+            quantity INT CHECK (quantity > 0),
+            UNIQUE (invoice_id, arr_index)
         ); 
     `);
 }

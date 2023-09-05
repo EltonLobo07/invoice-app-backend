@@ -1,22 +1,26 @@
 /** Types generated for queries found in "src/queries/invoices.sql" */
 import { PreparedQuery } from '@pgtyped/runtime';
 
+export type Json = null | boolean | number | string | Json[] | { [key: string]: Json };
+
+export type JsonArray = (Json)[];
+
 /** 'GetAllInvoices' parameters type */
 export type IGetAllInvoicesParams = void;
 
 /** 'GetAllInvoices' return type */
 export interface IGetAllInvoicesResult {
+  client_address: Json | null;
   client_email: string | null;
   client_name: string | null;
-  created_at: Date;
+  created_at: string | null;
   description: string | null;
-  id: number;
-  item_name: string | null;
-  item_price: string | null;
-  item_quantity: number | null;
-  item_total: string | null;
-  payment_terms: number;
-  status_type: string;
+  id: string | null;
+  items: JsonArray | null;
+  payment_due: string | null;
+  payment_terms: number | null;
+  sender_address: Json | null;
+  status: string | null;
 }
 
 /** 'GetAllInvoices' query type */
@@ -25,34 +29,52 @@ export interface IGetAllInvoicesQuery {
   result: IGetAllInvoicesResult;
 }
 
-const getAllInvoicesIR: any = {"usedParamSet":{},"params":[],"statement":"SELECT \n    invoices.id,\n    invoices.created_at,\n    invoices.description,\n    payment_terms.num_days AS payment_terms,\n    invoices.client_name,\n    invoices.client_email,\n    statuses.type AS status_type,\n    items.name AS item_name,\n    items.price AS item_price,\n    items.quantity AS item_quantity,\n    items.price * items.quantity AS item_total\nFROM \n    invoices\nJOIN \n    payment_terms ON payment_terms.id = invoices.payment_term_id\nJOIN\n    statuses ON statuses.id = invoices.status_id\nLEFT JOIN\n    items ON items.invoice_id = invoices.id"};
+const getAllInvoicesIR: any = {"usedParamSet":{},"params":[],"statement":"SELECT * FROM result_invoices"};
 
 /**
  * Query generated from SQL:
  * ```
- * SELECT 
- *     invoices.id,
- *     invoices.created_at,
- *     invoices.description,
- *     payment_terms.num_days AS payment_terms,
- *     invoices.client_name,
- *     invoices.client_email,
- *     statuses.type AS status_type,
- *     items.name AS item_name,
- *     items.price AS item_price,
- *     items.quantity AS item_quantity,
- *     items.price * items.quantity AS item_total
- * FROM 
- *     invoices
- * JOIN 
- *     payment_terms ON payment_terms.id = invoices.payment_term_id
- * JOIN
- *     statuses ON statuses.id = invoices.status_id
- * LEFT JOIN
- *     items ON items.invoice_id = invoices.id
+ * SELECT * FROM result_invoices
  * ```
  */
 export const getAllInvoices = new PreparedQuery<IGetAllInvoicesParams,IGetAllInvoicesResult>(getAllInvoicesIR);
+
+
+/** 'GetInvoiceByFrontendId' parameters type */
+export interface IGetInvoiceByFrontendIdParams {
+  frontendId?: string | null | void;
+}
+
+/** 'GetInvoiceByFrontendId' return type */
+export interface IGetInvoiceByFrontendIdResult {
+  client_address: Json | null;
+  client_email: string | null;
+  client_name: string | null;
+  created_at: string | null;
+  description: string | null;
+  id: string | null;
+  items: JsonArray | null;
+  payment_due: string | null;
+  payment_terms: number | null;
+  sender_address: Json | null;
+  status: string | null;
+}
+
+/** 'GetInvoiceByFrontendId' query type */
+export interface IGetInvoiceByFrontendIdQuery {
+  params: IGetInvoiceByFrontendIdParams;
+  result: IGetInvoiceByFrontendIdResult;
+}
+
+const getInvoiceByFrontendIdIR: any = {"usedParamSet":{"frontendId":true},"params":[{"name":"frontendId","required":false,"transform":{"type":"scalar"},"locs":[{"a":41,"b":51}]}],"statement":"SELECT * FROM result_invoices WHERE id = :frontendId"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * SELECT * FROM result_invoices WHERE id = :frontendId
+ * ```
+ */
+export const getInvoiceByFrontendId = new PreparedQuery<IGetInvoiceByFrontendIdParams,IGetInvoiceByFrontendIdResult>(getInvoiceByFrontendIdIR);
 
 
 /** 'AddInvoice' parameters type */

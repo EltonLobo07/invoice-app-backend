@@ -41,9 +41,19 @@ content-type: application/json
     },
     "items": [
         {
-            "name": "some name",
+            "name": "item 1 name",
             "price": 12.34,
             "quantity": 12
+        },
+        {
+            "name": "item 2 name",
+            "price": 48.122222,
+            "quantity": 21
+        },
+        {
+            "name": "item 3 name",
+            "price": 120.5773,
+            "quantity": 3
         }
     ]
 }
