@@ -1,5 +1,10 @@
 import * as pg from "pg";
-import { draftStatusInvoiceSchema, exceptDraftStatusInvoiceSchema, idSchema, statusSchema } from "./validation-schemas";
+import { 
+    draftStatusInvoiceSchema, 
+    exceptDraftStatusInvoiceSchema, 
+    idSchema, 
+    statusSchema 
+} from "./validation-schemas/invoices";
 
 function validateAndGetInvoiceData(content: unknown, id?: string) {
     const statusObj = statusSchema.parse(content);

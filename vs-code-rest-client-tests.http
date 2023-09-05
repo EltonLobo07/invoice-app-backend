@@ -1,10 +1,11 @@
 @hostname = localhost
 @port = 3000
-@baseurl = http://{{hostname}}:{{port}}/invoices
+@baseurl = http://{{hostname}}:{{port}}
+@invoicespath = invoices
 
 ###
 
-POST {{baseurl}}  HTTP/1.1
+POST {{baseurl}}/{{invoicespath}}  HTTP/1.1
 content-type: application/json
 
 {
@@ -16,7 +17,7 @@ content-type: application/json
 
 ###
 
-POST {{baseurl}} HTTP/1.1
+POST {{baseurl}}/{{invoicespath}} HTTP/1.1
 content-type: application/json
 
 {
@@ -60,7 +61,7 @@ content-type: application/json
 
 ###
 
-PUT {{baseurl}}/AB3457
+PUT {{baseurl}}/{{invoicespath}}/AB3457
 content-type: application/json
 
 {
@@ -98,7 +99,7 @@ content-type: application/json
 
 ###
 
-PUT {{baseurl}}/AB3455  HTTP/1.1
+PUT {{baseurl}}/{{invoicespath}}/AB3455  HTTP/1.1
 content-type: application/json
 
 {
@@ -110,20 +111,20 @@ content-type: application/json
 
 ###
 
-GET {{baseurl}} HTTP/1.1
+GET {{baseurl}}/{{invoicespath}} HTTP/1.1
 
 ###
 
-GET {{baseurl}}/AB3457 HTTP/1.1
+GET {{baseurl}}/{{invoicespath}}/AB3457 HTTP/1.1
 
 ###
 
-GET {{baseurl}}/AB3453 HTTP/1.1
+GET {{baseurl}}/{{invoicespath}}/AB3453 HTTP/1.1
 
 ###
 
-DELETE {{baseurl}}/AB3453 HTTP/1.1
+DELETE {{baseurl}}/{{invoicespath}}/AB3453 HTTP/1.1
 
 ###
 
-DELETE {{baseurl}}/AB3457 HTTP/1.1
+DELETE {{baseurl}}/{{invoicespath}}/AB3457 HTTP/1.1
