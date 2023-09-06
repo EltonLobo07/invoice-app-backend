@@ -7,7 +7,7 @@ import { middlewares } from "./middlewares";
 export const appBuilder = () => {
     const app = express();
     app.use(express.json());
-    app.use(middlewares.requestLogger);
+    app.use(middlewares.requestLogger());
     app.use(usersRouter);
     app.use(authenticationRouter);
     app.use(invoicesRouter);
