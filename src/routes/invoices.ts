@@ -12,14 +12,18 @@ import { findPaymentTermByNumDays } from "../queries/payment_terms.queries";
 import { addAddresses } from "../queries/addresses.queries";
 import { IAddItemsResult, addItems } from "../queries/items.queries";
 import * as pg from "pg";
+import { middlewares } from "../middlewares";
 
 export const invoicesRouter = express.Router();
 
 const BASE_URL = "/invoices";
 
-invoicesRouter.get(BASE_URL, (req, res, next) => {
+invoicesRouter.get(BASE_URL, middlewares.extractAndDecodeToken, (req, res, next) => {
     void (async () => {
         try {        
+            if (req.decodedToken === undefined) {
+                throw new Error("logic error (bug)");
+            }
             const invoices = await getAllInvoicesByUserId.run({
                 userId: req.decodedToken.id
             }, pool);
@@ -40,9 +44,12 @@ invoicesRouter.get(BASE_URL, (req, res, next) => {
     })();
 });
 
-invoicesRouter.get(`${BASE_URL}/:frontendId`, (req, res, next) => {
+invoicesRouter.get(`${BASE_URL}/:frontendId`, middlewares.extractAndDecodeToken, (req, res, next) => {
     void (async () => {
         try {
+            if (req.decodedToken === undefined) {
+                throw new Error("logic error (bug)");
+            } 
             const [invoice] = await getInvoiceByUserAndFrontendId.run({
                 userId: req.decodedToken.id,
                 frontendId: req.params.frontendId
@@ -162,15 +169,19 @@ async function invoiceRouterAddInvoice<
     }; 
 }
 
-invoicesRouter.post(BASE_URL, (req, res, next) => {
+invoicesRouter.post(BASE_URL, middlewares.extractAndDecodeToken, (req, res, next) => {
     void (async () => {
             try {
+                if (req.decodedToken === undefined) {
+                    throw new Error("logic error (bug)");
+                }
+                const { decodedToken } = req;
                 const addedTransformedInvoice = await helpers.useTransaction(
                     pool,
                     (client) => invoiceRouterAddInvoice({
                         client,
                         reqBody: req.body,
-                        userId: req.decodedToken.id,
+                        userId: decodedToken.id,
                         res
                     }) 
                 );
@@ -184,14 +195,18 @@ invoicesRouter.post(BASE_URL, (req, res, next) => {
     })();
 });
 
-invoicesRouter.put(`${BASE_URL}/:invoiceId`, (req, res, next) => {
+invoicesRouter.put(`${BASE_URL}/:invoiceId`, middlewares.extractAndDecodeToken, (req, res, next) => {
     void (async () => {
         try {
+            if (req.decodedToken === undefined) {
+                throw new Error("logic error (bug)");
+            }
+            const { decodedToken } = req;
             const updatedInvoice = await helpers.useTransaction(
                 pool, 
                 async (client) => {
                     const [deletedInvoice] = await deleteInvoiceByUserAndFrontendId.run({
-                        userId: req.decodedToken.id,
+                        userId: decodedToken.id,
                         frontendId: req.params.invoiceId
                     }, client);
                     if (!deletedInvoice) {
@@ -202,7 +217,7 @@ invoicesRouter.put(`${BASE_URL}/:invoiceId`, (req, res, next) => {
                         client,
                         reqBody: req.body,
                         res,
-                        userId: req.decodedToken.id,
+                        userId: decodedToken.id,
                         id: req.params.invoiceId
                     });
                 }
@@ -217,9 +232,12 @@ invoicesRouter.put(`${BASE_URL}/:invoiceId`, (req, res, next) => {
     })();
 });
 
-invoicesRouter.delete(`${BASE_URL}/:invoiceId`, (req, res, next) => {
+invoicesRouter.delete(`${BASE_URL}/:invoiceId`, middlewares.extractAndDecodeToken, (req, res, next) => {
     void (async () => {
         try {
+            if (req.decodedToken === undefined) {
+                throw new Error("logic error (bug)");
+            }
             await deleteInvoiceByUserAndFrontendId.run({
                 userId: req.decodedToken.id,
                 frontendId: req.params.invoiceId
