@@ -29,7 +29,7 @@ const essentialsSchema = z.object({
             Number.isFinite(new Date(dateStr).getTime())
         );
     }, {
-        message: "createdAt should be a date string. Valid date string format: YYYY-DD-MM"
+        message: "should be a date string. Valid date string format: YYYY-MM-DD"
     }),
     paymentTerms: z.number().refine(val => new Set<number>(ALLOWED_PAYMENT_TERM).has(val), {
         message: `paymentTerms should be one of: ${ALLOWED_PAYMENT_TERM.join(", ")}`
