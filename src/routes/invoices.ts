@@ -23,7 +23,16 @@ invoicesRouter.get(BASE_URL, (req, res, next) => {
             const invoices = await getAllInvoicesByUserId.run({
                 userId: req.decodedToken.id
             }, pool);
-            res.json(helpers.recursiveKeyCamelCase(invoices));
+            res.json(
+                helpers.recursiveKeyCamelCase(
+                    invoices.map(
+                        invoice => helpers.makeShallowObjWithKeysRemoved(
+                            invoice, 
+                            ["user_id"]
+                        )
+                    )
+                )
+            );
         }
         catch(error) {
             next(error);
@@ -42,7 +51,14 @@ invoicesRouter.get(`${BASE_URL}/:frontendId`, (req, res, next) => {
                 res.status(404).json({message: "invoice not found"});
                 return;
             }
-            res.json(helpers.recursiveKeyCamelCase(invoice));
+            res.json(
+                helpers.recursiveKeyCamelCase(
+                    helpers.makeShallowObjWithKeysRemoved(
+                        invoice,
+                        ["user_id"]
+                    )
+                )
+            );
         }
         catch(error) {
             next(error);
