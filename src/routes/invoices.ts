@@ -26,7 +26,6 @@ invoicesRouter.get(BASE_URL, (req, res, next) => {
             res.json(helpers.recursiveKeyCamelCase(invoices));
         }
         catch(error) {
-            console.log(error);
             next(error);
         }
     })();
@@ -46,7 +45,6 @@ invoicesRouter.get(`${BASE_URL}/:frontendId`, (req, res, next) => {
             res.json(helpers.recursiveKeyCamelCase(invoice));
         }
         catch(error) {
-            console.log(error);
             next(error);
         }
     })();
@@ -165,7 +163,6 @@ invoicesRouter.post(BASE_URL, (req, res, next) => {
                 }
             }
             catch(error) {
-                console.log(error);
                 next(error);
             }
     })();
@@ -199,7 +196,6 @@ invoicesRouter.put(`${BASE_URL}/:invoiceId`, (req, res, next) => {
             }            
         }
         catch(error) {
-            console.log(error);
             next(error);
         }
     })();
@@ -215,7 +211,6 @@ invoicesRouter.delete(`${BASE_URL}/:invoiceId`, (req, res, next) => {
             res.status(204).end();
         }
         catch(error) {
-            console.log(error);
             next(error);
         }
     })();

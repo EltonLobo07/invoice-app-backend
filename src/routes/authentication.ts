@@ -34,7 +34,6 @@ authenticationRouter.post("/login", (req, res, next) => {
             res.status(201).json({jsonWebToken: jwt.sign(token, process.env.JWT_SECRET)});
         }
         catch(error) {
-            console.log(error);
             next(error);
         }
     })();

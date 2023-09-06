@@ -31,7 +31,6 @@ usersRouter.post("/users", (req, res, next) => {
             res.status(201).json(helpers.recursiveKeyCamelCase(addedUser));
         }
         catch(error) {
-            console.log(error);
             next(error);
         }
     })();
