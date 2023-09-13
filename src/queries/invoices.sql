@@ -1,5 +1,11 @@
 /* @name getAllInvoicesByUserId */
-SELECT * FROM result_invoices WHERE user_id = :userId;
+SELECT 
+    * 
+FROM 
+    result_invoices 
+WHERE 
+    user_id = :userId
+ORDER BY TO_DATE(created_at, 'YYYY-MM-DD') DESC;
 
 /* @name getInvoiceByUserAndFrontendId */
 SELECT * FROM result_invoices WHERE id = :frontendId AND user_id = :userId;

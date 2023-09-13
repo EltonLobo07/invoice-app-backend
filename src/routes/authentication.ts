@@ -31,7 +31,10 @@ authenticationRouter.post("/login", (req, res, next) => {
                 id: userInDb.id,
                 email: loginDetails.email
             };
-            res.status(201).json({jsonWebToken: jwt.sign(token, process.env.JWT_SECRET)});
+            res.status(201).json({
+                name: userInDb.name,
+                jsonWebToken: jwt.sign(token, process.env.JWT_SECRET)
+            });
         }
         catch(error) {
             next(error);

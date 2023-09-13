@@ -32,12 +32,18 @@ export interface IGetAllInvoicesByUserIdQuery {
   result: IGetAllInvoicesByUserIdResult;
 }
 
-const getAllInvoicesByUserIdIR: any = {"usedParamSet":{"userId":true},"params":[{"name":"userId","required":false,"transform":{"type":"scalar"},"locs":[{"a":46,"b":52}]}],"statement":"SELECT * FROM result_invoices WHERE user_id = :userId"};
+const getAllInvoicesByUserIdIR: any = {"usedParamSet":{"userId":true},"params":[{"name":"userId","required":false,"transform":{"type":"scalar"},"locs":[{"a":63,"b":69}]}],"statement":"SELECT \n    * \nFROM \n    result_invoices \nWHERE \n    user_id = :userId\nORDER BY TO_DATE(created_at, 'YYYY-MM-DD') DESC"};
 
 /**
  * Query generated from SQL:
  * ```
- * SELECT * FROM result_invoices WHERE user_id = :userId
+ * SELECT 
+ *     * 
+ * FROM 
+ *     result_invoices 
+ * WHERE 
+ *     user_id = :userId
+ * ORDER BY TO_DATE(created_at, 'YYYY-MM-DD') DESC
  * ```
  */
 export const getAllInvoicesByUserId = new PreparedQuery<IGetAllInvoicesByUserIdParams,IGetAllInvoicesByUserIdResult>(getAllInvoicesByUserIdIR);
