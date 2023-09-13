@@ -32,7 +32,7 @@ export interface IGetAllInvoicesByUserIdQuery {
   result: IGetAllInvoicesByUserIdResult;
 }
 
-const getAllInvoicesByUserIdIR: any = {"usedParamSet":{"userId":true},"params":[{"name":"userId","required":false,"transform":{"type":"scalar"},"locs":[{"a":63,"b":69}]}],"statement":"SELECT \n    * \nFROM \n    result_invoices \nWHERE \n    user_id = :userId\nORDER BY TO_DATE(created_at, 'YYYY-MM-DD') DESC"};
+const getAllInvoicesByUserIdIR: any = {"usedParamSet":{"userId":true},"params":[{"name":"userId","required":false,"transform":{"type":"scalar"},"locs":[{"a":63,"b":69}]}],"statement":"SELECT \n    * \nFROM \n    result_invoices \nWHERE \n    user_id = :userId\nORDER BY TO_DATE(payment_due, 'YYYY-MM-DD') ASC"};
 
 /**
  * Query generated from SQL:
@@ -43,7 +43,7 @@ const getAllInvoicesByUserIdIR: any = {"usedParamSet":{"userId":true},"params":[
  *     result_invoices 
  * WHERE 
  *     user_id = :userId
- * ORDER BY TO_DATE(created_at, 'YYYY-MM-DD') DESC
+ * ORDER BY TO_DATE(payment_due, 'YYYY-MM-DD') ASC
  * ```
  */
 export const getAllInvoicesByUserId = new PreparedQuery<IGetAllInvoicesByUserIdParams,IGetAllInvoicesByUserIdResult>(getAllInvoicesByUserIdIR);
