@@ -12,7 +12,7 @@ export type Token = {
     email: string
 };
 
-authenticationRouter.post("/login", (req, res, next) => {
+authenticationRouter.post("/api/login", (req, res, next) => {
     void (async () => {
         try {
             const loginDetails = autheticationDetailsSchema.parse(req.body);

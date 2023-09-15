@@ -7,7 +7,7 @@ import { helpers } from "../helpers";
 
 export const usersRouter = express.Router();
 
-usersRouter.post("/users", (req, res, next) => {
+usersRouter.post("/api/users", (req, res, next) => {
     void (async () => {
         try {
             const signupDetails = signupDetailsSchema.parse(req.body);

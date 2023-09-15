@@ -68,7 +68,9 @@ function errorHandler(error: unknown, _req: Request, res: Response, next: NextFu
         res.status(500).json({error: error.message});
         return;
     }
-    console.log("Unhandled error:", error);
+    if (process.env.NODE_ENV === "development") {
+        console.log("Unhandled error:", error);
+    }
     next(error);
 }
 

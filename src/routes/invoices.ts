@@ -16,7 +16,7 @@ import { middlewares } from "../middlewares";
 
 export const invoicesRouter = express.Router();
 
-const BASE_URL = "/invoices";
+const BASE_URL = "/api/invoices";
 
 invoicesRouter.get(BASE_URL, middlewares.extractAndDecodeToken, (req, res, next) => {
     void (async () => {
