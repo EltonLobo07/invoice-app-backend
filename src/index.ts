@@ -15,7 +15,7 @@ pool
     .query("SELECT 1 + 1")
     .then(() => {
         server = app.listen(process.env.PORT || PORT, () => {
-            console.log(`App binding to PORT: ${PORT}`);
+            console.log(`Server running on PORT: ${PORT}`);
         });
     })
     .catch(console.log);
