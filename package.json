@@ -13,7 +13,7 @@
     "2-data-migration-ts": "ts-node ./migrations/data/2_add-guest-user.ts",
     "3-data-migration-ts": "ts-node ./migrations/data/3_add-invoices.ts",
     "pg-typed": "pgtyped -c config.json",
-    "deploy": "npm run tsc && node-pg-migrate redo 8 --migrations-dir=\"./build/migrations\" && node ./build/migrations/data/1_populate-payment-terms-and-statuses.js && node ./build/migrations/data/2_add-guest-user.js && node ./build/migrations/data/3_add-invoices.js && npm start"
+    "deploy": "node-pg-migrate redo 8 --migrations-dir=\"./build/migrations\" && node ./build/migrations/data/1_populate-payment-terms-and-statuses.js && node ./build/migrations/data/2_add-guest-user.js && node ./build/migrations/data/3_add-invoices.js && npm start"
   },
   "keywords": [],
   "author": "Elton Lobo",
@@ -28,10 +28,10 @@
     "@typescript-eslint/eslint-plugin": "^6.5.0",
     "@typescript-eslint/parser": "^6.5.0",
     "eslint": "^8.48.0",
-    "ts-node-dev": "^2.0.0"
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.2.2"
   },
   "dependencies": {
-    "typescript": "^5.2.2",
     "@pgtyped/runtime": "^2.1.0",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
