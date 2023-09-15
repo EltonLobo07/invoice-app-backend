@@ -73,12 +73,12 @@ invoicesRouter.get(`${BASE_URL}/:frontendId`, middlewares.extractAndDecodeToken,
     })();
 });
 
-async function invoiceRouterAddInvoice<
+export async function invoiceRouterAddInvoice<
     TRes extends Response
 >({ client, reqBody, res, userId, id }: {
     client: pg.PoolClient,
     reqBody: unknown,
-    res: TRes,
+    res?: TRes,
     userId: number,
     id?: string 
 }) {
@@ -87,14 +87,14 @@ async function invoiceRouterAddInvoice<
         type: invoiceData.status
     }, client))[0];
     if (!statusEntry) {
-        res.status(404).json({message: "status type not found"});
+        res?.status(404).json({message: "status type not found"});
         return;
     }
     const paymentTermEntry = (await findPaymentTermByNumDays.run({
         numDays: invoiceData.paymentTerms
     }, client))[0];
     if (!paymentTermEntry) {
-        res.status(404).json({message: "paymentTerm not found"});
+        res?.status(404).json({message: "paymentTerm not found"});
         return;
     }
     /*

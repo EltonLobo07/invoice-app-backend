@@ -7,10 +7,13 @@
     "tsc": "tsc",
     "dev": "ts-node-dev ./src/index.ts",
     "lint": "eslint --ext .ts .",
-    "start": "node build/index.js",
+    "start": "node ./build/src/index.js",
     "migrate": "ts-node node_modules/node-pg-migrate/bin/node-pg-migrate -j ts",
-    "1-data-migration": "ts-node ./migrations/data/1_populate-payment-terms-and-statuses.ts",
-    "pg-typed": "pgtyped -c config.json"
+    "1-data-migration-ts": "ts-node ./migrations/data/1_populate-payment-terms-and-statuses.ts",
+    "2-data-migration-ts": "ts-node ./migrations/data/2_add-guest-user.ts",
+    "3-data-migration-ts": "ts-node ./migrations/data/3_add-invoices.ts",
+    "pg-typed": "pgtyped -c config.json",
+    "deploy": "node-pg-migrate redo 8 --migrations-dir=\"./build/migrations\" && node ./build/migrations/data/1_populate-payment-terms-and-statuses.js && node ./build/migrations/data/2_add-guest-user.js && node ./build/migrations/data/3_add-invoices.js && npm start"
   },
   "keywords": [],
   "author": "Elton Lobo",
