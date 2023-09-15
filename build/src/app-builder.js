@@ -13,6 +13,7 @@ const middlewares_1 = require("./middlewares");
 const appBuilder = () => {
     const app = (0, express_1.default)();
     app.use((0, cors_1.default)());
+    app.use(express_1.default.static("frontend_dist"));
     app.use(express_1.default.json());
     app.use(middlewares_1.middlewares.requestLogger());
     app.use(users_1.usersRouter);

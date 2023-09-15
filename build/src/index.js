@@ -11,7 +11,7 @@ let server = null;
 pool_1.pool
     .query("SELECT 1 + 1")
     .then(() => {
-    server = app.listen(PORT, () => {
+    server = app.listen(process.env.PORT || PORT, () => {
         console.log(`App binding to PORT: ${PORT}`);
     });
 })
