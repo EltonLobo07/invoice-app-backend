@@ -7,6 +7,7 @@ import {
 import { Token } from "./routes/authentication";
 import { ZodError } from "zod";
 import morgan from "morgan";
+import { helpers } from "./helpers";
 
 declare global {
     // eslint-disable-next-line @typescript-eslint/no-namespace, @typescript-eslint/no-unused-vars
@@ -68,9 +69,7 @@ function errorHandler(error: unknown, _req: Request, res: Response, next: NextFu
         res.status(500).json({error: error.message});
         return;
     }
-    if (process.env.NODE_ENV === "development") {
-        console.log("Unhandled error:", error);
-    }
+    helpers.logger("Unhandled error:", error);
     next(error);
 }
 

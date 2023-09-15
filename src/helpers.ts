@@ -111,6 +111,12 @@ function recursiveKeyCamelCase(item: unknown): unknown {
     );
 }
 
+function logger(...args: unknown[]) {
+    if (process.env.NODE_ENV === "development") {
+        console.log(...args);
+    }
+}
+
 export const helpers = {
     validateAndGetInvoiceData,
     buildInvoiceParams,
@@ -119,5 +125,6 @@ export const helpers = {
     roundNumToTwoDigitsAfterPoint,
     useTransaction,
     makeShallowObjWithKeysRemoved,
-    recursiveKeyCamelCase
+    recursiveKeyCamelCase,
+    logger
 };
