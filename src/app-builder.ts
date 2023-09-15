@@ -8,6 +8,7 @@ import { middlewares } from "./middlewares";
 export const appBuilder = () => {
     const app = express();
     app.use(cors());
+    app.use(express.static("frontend_dist"));
     app.use(express.json());
     app.use(middlewares.requestLogger());
     app.use(usersRouter);
